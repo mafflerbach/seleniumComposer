@@ -1,0 +1,57 @@
+<template class="task-template">
+
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="hub" data-command="run">
+    Start hub
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="hub" data-command="stop"
+          style="display:none">
+    stop hub
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="all" data-command="run">
+    Start all
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="all" data-command="stop"
+          style="display:none">
+    stop all
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="chrome" data-command="run">
+    start chrome
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="chrome" data-command="stop"
+          style="display:none">
+    stop chrome
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="firefox" data-command="run">
+    start firefox
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="firefox" data-command="stop"
+          style="display:none">
+    stop firefox
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="internet explorer" data-command="run">
+    start ie
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="internet explorer" data-command="stop"
+          style="display:none">
+    stop ie
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="MicrosoftEdge" data-command="run">
+    start edge
+  </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-browser="MicrosoftEdge" data-command="stop"
+          style="display:none">
+    stop edge
+  </button>
+
+  <hr/>
+
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-driver="all">
+    get Driver
+  </button>
+
+  <button class="mdl-button mdl-js-button mdl-button--raised" data-install="edge" >
+    install  edge driver
+  </button>
+
+
+</template>
