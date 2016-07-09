@@ -107,6 +107,12 @@ var Selenium = class Selenium {
     if (this._checkHub() == false) {
       this._startHub(spawn);
     }
+    console.log(os)
+    console.log(os.platform());
+
+    console.log(os.arch());
+    console.log(os.type());
+    //@TODO convert \\ to / check on arch and platform look out .exe
     var parameter = new Array('-jar', appPath+'/thirdparty/selenium-server.jar',  '-role',  'node',  '-hub' , this.register , '-nodeConfig', appPath+'\\config\\capabilityChrome.json','-Dwebdriver.chrome.driver='+appPath+'\\thirdparty\\chromedriver_'+os.platform()+'\\chromedriver.exe');
     var seleniumNode = spawn('java', parameter);
     this._output(seleniumNode);
