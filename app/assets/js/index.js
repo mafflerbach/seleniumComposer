@@ -19,6 +19,36 @@ $(document).ready(function () {
       intervalManager(true);
     }
   })
+
+  $('button[data-driver]').click(function () {
+    var dep = new Dependencies();
+    dep.getallDriver($(this).data('driver'));
+  });
+
+  $('button[data-command]').click(function () {
+    if ($(this).data('command') == 'clrs') {
+      $('#terminal-content').empty();
+    }
+  });
+
+  $('button[data-installer]').click(function () {
+    var installer = null;
+    switch ($(this).data('installer')) {
+      case 'firefox' :
+        installer = new InstallerFirefox();
+        break;
+      case 'java' :
+        installer = new InstallerJava();
+        break;
+      case 'chrome' :
+        installer = new InstallerChrome();
+        break;
+    }
+
+    installer.getInstaller();
+
+
+  });
 })
 
 function intervalManager(activate) {
@@ -33,14 +63,7 @@ function intervalManager(activate) {
   }
 }
 
-$(document).ready(function () {
 
-  $('button[data-driver]').click(function () {
-    var dep = new Dependencies();
-    dep.getallDriver($(this).data('driver'));
-  });
-
-})
 jQuery.fn.orderBy = function(keySelector)
 {
   return this.sort(function(a,b)
