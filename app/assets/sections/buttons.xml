@@ -31,10 +31,6 @@
     get Firefox
   </button>
 
-  <button class="mdl-button mdl-js-button mdl-button--raised" data-install="firefox">
-    install Firefox
-  </button>
-
   <script type="text/javascript">
 
 

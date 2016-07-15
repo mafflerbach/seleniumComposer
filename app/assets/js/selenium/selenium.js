@@ -31,17 +31,14 @@ var Selenium = class Selenium {
       default:
         this.chrome = this._startChrome(spawn);
         this.firefox = this._startFirefox(spawn);
-        this.ie = this._startIe(spawn);
-        this.edge = this._startEdge(spawn);
+        if(os.platform().indexOf('win') >= 0) {
+          this.ie = this._startIe(spawn);
+          this.edge = this._startEdge(spawn);
+        }
         break;
     }
 
   };
-
-  test() {
-    this.call('http://http://192.168.0.21:5556/selenium-server/driver/?cmd=shutDownSeleniumServer')
-
-  }
 
 
   call(str) {
@@ -107,13 +104,32 @@ var Selenium = class Selenium {
     if (this._checkHub() == false) {
       this._startHub(spawn);
     }
-    console.log(os)
-    console.log(os.platform());
 
-    console.log(os.arch());
-    console.log(os.type());
     //@TODO convert \\ to / check on arch and platform look out .exe
-    var parameter = new Array('-jar', appPath+'/thirdparty/selenium-server.jar',  '-role',  'node',  '-hub' , this.register , '-nodeConfig', appPath+'\\config\\capabilityChrome.json','-Dwebdriver.chrome.driver='+appPath+'\\thirdparty\\chromedriver_'+os.platform()+'\\chromedriver.exe');
+    var parameter = new Array(
+        '-jar',
+        appPath+'/thirdparty/selenium-server.jar',
+        '-role',
+        'node',
+        '-hub' ,
+        this.register ,
+        '-nodeConfig',
+        appPath+'/config/capabilityChrome.json'
+    );
+
+
+    if(os.platform().indexOf('linux') >= 0) {
+      console.log(os.arch());
+      if (os.arch() == 'x64') {
+        parameter.push('-Dwebdriver.chrome.driver='+appPath+'/thirdparty/chromedriver_'+os.platform()+'64/chromedriver');
+      } else {
+        parameter.push('-Dwebdriver.chrome.driver='+appPath+'/thirdparty/chromedriver_'+os.platform()+'32/chromedriver');
+      }
+
+    } else {
+      parameter.push('-Dwebdriver.chrome.driver='+appPath+'\\thirdparty\\chromedriver_'+os.platform()+'\\chromedriver.exe');
+    }
+
     var seleniumNode = spawn('java', parameter);
     this._output(seleniumNode);
     return seleniumNode;
@@ -123,7 +139,8 @@ var Selenium = class Selenium {
     if (this._checkHub() == false) {
       this._startHub(spawn);
     }
-    var parameter = new Array('-jar', appPath+'/thirdparty/selenium-server.jar',  '-role',  'node',  '-hub', this.register , '-nodeConfig', appPath+'\\config\\capabilityFirefox.json');
+    var parameter = new Array('-jar', appPath+'/thirdparty/selenium-server.jar',  '-role',  'node',  '-hub', this.register , '-nodeConfig', appPath+'/config/capabilityFirefox.json');
+
     var seleniumNode = spawn('java', parameter);
     this._output(seleniumNode);
     return seleniumNode;
@@ -143,8 +160,6 @@ var Selenium = class Selenium {
     if (this._checkHub() == false) {
       this._startHub(spawn);
     }
-
-
 
     var parameter = new Array('-jar', appPath+'/thirdparty/selenium-server.jar', '-role', 'node', '-hub' , this.register , '-nodeConfig', appPath+'\\config\\capabilityIe.json','-Dwebdriver.ie.driver='+appPath+'\\thirdparty\\iedriverserver_'+os.platform()+'\\IEDriverServer.exe');
     var seleniumNode = spawn('java', parameter);
@@ -180,8 +195,8 @@ var Selenium = class Selenium {
 
     obj.stderr.on('data', (data) => {
       var test = `${data}`;
-      $('#terminal-content').append(test+'<br/>');
-      $('#terminal-window').scrollTop(1E10);
+    $('#terminal-content').append(test+'<br/>');
+    $('#terminal-window').scrollTop(1E10);
 
   })
     ;

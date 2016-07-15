@@ -2,49 +2,73 @@
 var InstallerChrome = class InstallerChrome {
 
   constructor() {
-    console.log(os);
-    console.log(os.arch());
-    console.log(os.platform());
+
   }
 
-  getChrome (revision) {
-
-    var dwlink = '//https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F'+revision+'%2Fchrome-linux.zip?alt=media';
-    if (os.platform().indexOf('win') == 0) {
-      dwlink = 'https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win_x64%2F'+revision+'%2Fchrome-win32.zip?alt=media';
-    }
-
-    var terminal2 = new Terminal('get Chromium Browser');
-    terminal2.updateTerminal();
-    download(dwlink , appPath+'/thirdparty', {'extract': true}).then(data => {
-        fs.unlinkSync(appPath+'/thirdparty/chromerelease.txt');
-        terminal2.clearInterval('<br/>Done');
+  installWinInstaller(link) {
+    terminal.terminalMessage(link)
+    download(link , appPath+'/thirdparty').then(data => {
+      terminal.clearInterval('done: ' + link );
+      var seleniumNode = spawn(appPath + '/thirdparty/ChromeSetup.exe');
+      that._output(seleniumNode);
     });
   }
-
-
   getInstaller() {
-    var terminal = new Terminal('get Revision');
-    var that = this;
 
-    var link ="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media";
-    if (os.platform().indexOf('win') == 0) {
-      link ="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win_x64%2FLAST_CHANGE?alt=media";
+    var link = ''
+    switch (os.platform()) {
+      case 'win32':
+        link ="https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7BD3585D62-F229-BBB7-807A-3D642C471CEE%7D%26lang%3Dde%26browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26installdataindex%3Ddefaultbrowser/update2/installers/ChromeSetup.exe";
+        this.installWinInstaller(link);
+        break;
+      case 'win64':
+        link ="https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7BD3585D62-F229-BBB7-807A-3D642C471CEE%7D%26lang%3Dde%26browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26installdataindex%3Ddefaultbrowser/update2/installers/ChromeSetup.exe";
+        this.installWinInstaller(link);
+        break
+      default :
+        this.runInstaller();
+        break;
     }
-
-    download(link ).then(data => {
-      fs.writeFileSync(appPath + '/thirdparty/chromerelease.txt', data);
-      fs.readFile(appPath + '/thirdparty/chromerelease.txt', 'utf8', function (err,revision) {
-        if (err) {
-          return console.log(err);
-        }
-        that.getChrome(revision);
-      });
-      terminal.clearInterval('done: ' + link );
-    })
 
   }
 
+  runInstaller () {
+    $('#terminal-content').append('apt-get install chromium-browser');
+    $('#terminal-window').scrollTop(1E10);
+    var parameter = new Array('apt-get','-y', 'install', 'chromium-browser');
+    var seleniumNode = spawn('sudo', parameter);
+    this._output(seleniumNode);
+  }
+
+  _output(obj) {
+    obj.stdout.on('data', (data) => {
+      var test = `${data}`;
+      $('#terminal-content').append(test + '<br/>');
+      $('#terminal-window').scrollTop(1E10);
+    })
+    ;
+
+    obj.stderr.on('data', (data) => {
+      var test = `${data}`;
+      $('#terminal-content').append(test + '<br/>');
+      $('#terminal-window').scrollTop(1E10);
+    })
+
+    obj.stderr.on('message', (data) => {
+      var test = `${data}`;
+      $('#terminal-content').append(test + '<br/>');
+      $('#terminal-window').scrollTop(1E10);
+    })
+    ;
+
+    obj.on('close', (code) => {
+      var test = `${code}`;
+      $('#terminal-content').append('finish chrome <br/>');
+      $('#terminal-window').scrollTop(1E10);
+    })
+    ;
+  }
+
+
+
 }
-  //https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win_x64%2F405713%2Fchrome-win32.zip&alt=media
-  //https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F405719%2Fchrome-linux.zip?alt=media
