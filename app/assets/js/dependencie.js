@@ -68,9 +68,9 @@ var Dependencies = class Dependencies {
 
       decompress(appPath+'/thirdparty/' + filename, appPath+'/thirdparty/' + newname.replace(/\.zip/, '').toLowerCase()).then(files => {
         $('#terminal-content').append('decompress: '+filename+'<br/>');
-      fs.unlinkSync(appPath+'/thirdparty/' + filename);
-      $('#terminal-window').scrollTop(1E10);
-    });
+        fs.unlinkSync(appPath+'/thirdparty/' + filename);
+        $('#terminal-window').scrollTop(1E10);
+      });
     }
   });
   }

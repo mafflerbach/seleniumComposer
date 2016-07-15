@@ -3,6 +3,7 @@ const path = require('path');
 const glob = require('glob');
 const selenium = require('./assets/js/selenium/selenium.js');
 const spawn = require('child_process').spawn;
+const terminal = require('./assets/js/terminal.js');
 
 const BrowserWindow = electron.BrowserWindow;
 const app = electron.app;

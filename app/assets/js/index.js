@@ -20,6 +20,11 @@ $(document).ready(function () {
     }
   })
 
+  $('button[data-install]').click(function () {
+    var install = new InstallerJava()
+    install.runInstaller();
+  });
+
   $('button[data-driver]').click(function () {
     var dep = new Dependencies();
     dep.getallDriver($(this).data('driver'));
@@ -77,3 +82,9 @@ jQuery.fn.orderBy = function(keySelector)
     return 0;
   });
 };
+
+
+
+function updateTerminal() {
+  $('#terminal-content').append('-');
+}
