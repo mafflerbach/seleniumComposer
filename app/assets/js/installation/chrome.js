@@ -37,6 +37,14 @@ var InstallerChrome = class InstallerChrome {
     $('#terminal-window').scrollTop(1E10);
     var parameter = new Array('apt-get','-y', 'install', 'chromium-browser');
     var seleniumNode = spawn('sudo', parameter);
+
+    this._output(seleniumNode);
+
+    $('#terminal-content').append('create symlink to chrome');
+    $('#terminal-window').scrollTop(1E10);
+    var parameter = new Array('ln','-s', '/usr/bin/chromium-browser', '/usr/bin/chrome');
+    var seleniumNode = spawn('sudo', parameter);
+
     this._output(seleniumNode);
   }
 

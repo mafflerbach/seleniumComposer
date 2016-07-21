@@ -1,4 +1,6 @@
 
+var sudo = require('electron-sudo');
+
 var InstallerJava = class InstallerJava {
 
   constructor() {
@@ -8,6 +10,23 @@ var InstallerJava = class InstallerJava {
   runInstaller () {
     $('#terminal-content').append('apt-get install default-jre');
     $('#terminal-window').scrollTop(1E10);
+
+
+    var options = {
+      name: 'install openJre (apt-get install default-jre)',
+      process: {
+        on: function(ps) {
+          ps.stdout.on('data', function(data) {});
+          setTimeout(function() {
+            ps.kill()
+          }.bind(ps), 50000);
+        }
+      }
+    };
+
+    sudo.exec('apt-get install default-jre', options, function(error) {});
+
+
     var parameter = new Array('apt-get','-y', 'install', 'default-jre');
     var seleniumNode = spawn('sudo', parameter);
     this._output(seleniumNode);
@@ -15,18 +34,44 @@ var InstallerJava = class InstallerJava {
 
   installWinInstaller(link) {
     var self = this;
-    var terminal2 = new Terminal('get Fucking java');
-    terminal2.updateTerminal();
-    download(link).then(data => {
-      if (os.platform().indexOf('win') == 0) {
-      var filename = 'java.exe';
-      fs.writeFileSync(appPath + '/thirdparty/' + filename, data);
-      var parameter = new Array('/s');
-      var seleniumNode = spawn(appPath + '/thirdparty/java.exe', parameter);
-      self._output(seleniumNode);
-      terminal2.clearInterval('done: ' + link);
+
+
+    if (!fs.existsSync(appPath + '/thirdparty/java.exe')) {
+
+
+      var terminal2 = new Terminal('get java');
+      terminal2.updateTerminal();
+
+      download(link).then(data => {
+        if (os.platform().indexOf('win') == 0) {
+          var filename = 'java.exe';
+          fs.writeFileSync(appPath + '/thirdparty/' + filename, data);
+          self.sudoJavaInstaller();
+          terminal2.clearInterval('done: ' + link);
+        }
+      });
+
+    } else {
+      self.sudoJavaInstaller();
     }
-  });
+  }
+
+  sudoJavaInstaller() {
+    var options = {
+      name: 'Java installer',
+      process: {
+        on: function(ps) {
+          ps.stdout.on('data', function(data) {});
+          setTimeout(function() {
+            ps.kill()
+          }.bind(ps), 50000);
+        }
+      }
+    };
+    var terminal2 = new Terminal('install java');
+    terminal2.updateTerminal();
+    sudo.exec(appPath + '/thirdparty/java.exe /s', options, function(error) {});
+    terminal2.clearInterval('done: installation');
   }
 
   getInstaller () {

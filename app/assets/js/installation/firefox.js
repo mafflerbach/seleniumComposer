@@ -47,7 +47,7 @@ var InstallerFirefox = class InstallerFirefox {
 
   installWinInstaller(link) {
     var self = this;
-    var terminal2 = new Terminal('get Fucking java');
+    var terminal2 = new Terminal('get Firefox');
     terminal2.updateTerminal();
     download(link).then(data => {
       fs.writeFileSync(appPath + '/thirdparty/firefox.exe', data);

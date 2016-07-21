@@ -3,7 +3,8 @@
     {
       "browserName": "firefox",
       "maxInstances": 10,
-      "seleniumProtocol": "WebDriver"
+      "seleniumProtocol": "WebDriver",
+      "version": "ANY"
     }
   ],
   "configuration": {
